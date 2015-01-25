@@ -23,7 +23,13 @@
       <div>
 	{% block slider%}{% endblock%}
       </div>
-    </ul>
+      <div id="content">
+	<p style="font-size-adjust: 1.1;">{% block title%}{% endblock%}</p><br>
+	<p align="justify">{% block content%}{% endblock%}</p>
+      </div>
+      <div>
+	{% block imgmenu%}{% endblock%}
+      </div>
     </div>
   </body>
 </html>

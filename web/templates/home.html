@@ -10,3 +10,19 @@
   </ul>
 </div>
 {% endblock%}
+
+{% block content%}
+{{content|safe}}
+{% endblock%}
+
+{% block title%}
+{{title|safe}}
+{% endblock%}
+
+{% block imgmenu%}
+
+{% for i in img%}
+        <a href=/{{i.nombre}}><img src=/static/{{i.imagen}}></a>
+	{% endfor %}
+
+{% endblock%}

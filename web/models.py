@@ -135,6 +135,13 @@ class menu(models.Model):
 
 class elmolino(models.Model):
 	nombre = models.CharField(max_length=10)
-	texto = models.CharField(max_length=300)
+	texto = models.CharField(max_length=1500)
+	def __unicode__(self):
+		return str(self.nombre)
+
+
+class oferta(models.Model):
+	nombre = models.CharField(max_length=1500)
+	imagen = models.ImageField()
 	def __unicode__(self):
 		return str(self.nombre)

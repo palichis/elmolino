@@ -24,9 +24,13 @@ def menus(objeto):
                 barra =  barra1 + '</ul>'
             barra = barra + '</li>'
     return barra
-    
+  
+
 
 def home(request):
     html = slide()
     men = menus(menu.objects.filter(nivel = 1))
-    return render_to_response('home.html',{'slide':html, 'menu':men})
+    hist = elmolino.objects.filter(nombre = 'historia')
+    ofer = oferta.objects.all()    
+    return render_to_response('home.html',{'slide':html, 'menu':men, 'content': hist[0].texto, 'title': hist[0].nombre, 'img': ofer})
+
