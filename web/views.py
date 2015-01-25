@@ -7,7 +7,7 @@ def slide():
     img = galeria.objects.filter(activa=True)
     sl = '<ul id="slider1">'
     for imagen in img:
-        sl = sl + '<li><img src="/static/%s" alt=""></li>'%str(imagen.imagen)
+        sl = sl + '<li><img src="/static/%s" alt=""  height="252" width="1024"></li>'%str(imagen.imagen)
     sl = sl + '</ul>'
     return sl
 
