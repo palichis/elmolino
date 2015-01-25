@@ -1,0 +1,16 @@
+
+#all {
+    height: 100%;
+    margin: 0 auto;
+    width: 1024px;
+}
+
+#header {
+    background: url("/static/img/header.png") no-repeat;
+    height: 265px;
+}
+
+ul{
+    list-style:none;
+    margin-left: -38px;
+}

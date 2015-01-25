@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>ResponsiveSlides.js &middot; Responsive jQuery slideshow</title>
+    <link rel="stylesheet" href="static/js/responsiveslides.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/responsiveslides.min.js"></script>
+    <script src="/static/js/slide.js"></script>
+    
+
+
+  </head>
+  <body>
+    <div id="all">
+      <div id="header">
+      </div>
+      <!-- Slideshow 1 -->
+      <div>
+	{% block slider%}{% endblock%} 
+      </div>
+    </ul>
+    </div>
+  </body>
+</html>
