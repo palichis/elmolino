@@ -1,0 +1,67 @@
+{% extends "index.html"%}
+{% block slider%}
+{{slide|safe}}
+{% endblock%}
+
+{% block menu%}
+<div id="cssmenu">
+  <ul>
+    {{menu|safe}}
+  </ul>
+</div>
+{% endblock%}
+
+{% block categoria%}
+
+  <div id="izquierda" >
+    <ul style="list-style:inside">
+      {% for i in lista%}
+      <li style="text-align:left"><a href=?cat={{categoria}}&id={{i.id}}>{{i.nombre}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div id="derecha">
+    <h3>{{producto.nombre}}</h3>
+    <p>
+      <div>
+      <ul id="slider1">
+	<il><img style="float:left; margin-right:30px;margin-left:30px" src=/static/{{producto.imagen}}  height="220" width="220"></il>
+	<il><img style="float:left; margin-right:30px;margin-left:30px" src=/static/{{producto.imagen1}}  height="220" width="220"></il>
+	<il><img style="float:left; margin-right:30px;margin-left:30px" src=/static/{{producto.imagen2}}  height="220" width="220"></il>
+      </ul>
+      </div>
+      <strong>C&oacute;digo:</strong> {{producto.codigo|safe}}<br>
+      <strong>Nombre</strong>: {{producto.nombre|safe}}<br>
+      <strong>Nombre Com&uacute;n</strong>: {{producto.nombre_comun|safe}}<br>
+      <strong>Nombre Cient&iacute;fico</strong>: {{producto.nombre_cientifico|safe}}<br>
+      <strong>Antura M&aacute;xima</strong>: {{producto.altura_maxima|safe}}<br>
+      <strong>Agua</strong>: {{producto.agua|safe}}<br>
+      <strong>Sol</strong>: {{producto.sol|safe}}<br>
+      <strong>Crecimiento</strong>: {{producto.crecimiento|safe}}<br>
+      <strong>Costo</strong>: {{producto.costo|safe}}<br>
+      <strong>Variedad</strong>: {{producto.variedad|safe}}<br>
+      <strong>Existencias</strong>: {{producto.cantidad|safe}}<br>
+    </p>
+    <p>
+      <strong>Detalle</strong>: <p style="text-align:justify">{{producto.detalle|safe}}</p><br>
+    </p>
+  </div>
+
+{% endblock%}
+
+
+{% block foother%}
+<table style="width:100%; background:#204609">
+  
+  <tr>
+    <td valign="top" style="width:33%; text-align:left; color: #A6C43E;"><strong>Contáctenos:</strong><br>{{foother.direccion}}<br>{{foother.telefono}}<br><a href=mailto:{{foother.correo}}>{{foother.correo}}</a>    </td>
+    <td style="width:33%; text-align:left">{{foother.mapa|safe}}    </td>
+    <td valign="top" style="width:33%; text-align:center">
+    {% for r in red%}
+    <a href={{r.url}}><img src=/static/{{r.imagen|safe}}></a>    
+    {% endfor%}
+    </td>
+  </tr>
+
+</table>
+{% endblock%}

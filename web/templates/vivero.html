@@ -11,24 +11,16 @@
 </div>
 {% endblock%}
 
-{% block content%}
-{{content|safe}}
+{% block categoria%}
+
+{{categoria|safe}}
+
 {% endblock%}
 
 {% block title%}
 {{title|safe}}
 {% endblock%}
 
-{% block imgmenu%}
-<table style="width:100%">
-  <tr>
-    {% for i in img%}
-    <td style="width:33%; text-align:center"><a href=/{{i.nombre}}><img src=/static/{{i.imagen}}  height="300" width="300"></a>
-    </td>
-    {% endfor %}
-  </tr>
-</table>
-{% endblock%}
 {% block foother%}
 <table style="width:100%; background:#204609">
   

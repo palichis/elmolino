@@ -1,0 +1,33 @@
+{% extends "index.html"%}
+{% block slider%}
+{{slide|safe}}
+{% endblock%}
+
+{% block menu%}
+<div id="cssmenu">
+  <ul>
+    {{menu|safe}}
+  </ul>
+</div>
+{% endblock%}
+
+{% block categoria%}
+
+{{categoria|safe}}
+
+{% endblock%}
+
+{% block title%}
+{{title|safe}}
+{% endblock%}
+
+{% block foother%}
+<table style="width:100%">
+  <tr>
+    {% for i in foother%}
+    <td style="width:33%; text-align:center"><p>{{i.descripcion }}</p>
+    </td>
+    {% endfor %}
+  </tr>
+</table>
+{% endblock%}

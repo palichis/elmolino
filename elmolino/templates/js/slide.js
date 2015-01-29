@@ -7,6 +7,7 @@
             speed: 800
 	});
 
+ 
       // Slideshow 2
 	$("#slider2").responsiveSlides({
             auto: false,

@@ -24,27 +24,35 @@ class variedad(models.Model):
 	def __unicode__(self):
 		return "%s-%s"%(self.nombre,self.origen)
 
+tipo_p = (('VI','Vivero'),('HU','Huerto'))
 
 class cat_producto(models.Model):
 	nombre = models.CharField(max_length=20)
-	fecha = models.DateField()
-	color = models.CharField(max_length=10)
-	especie = models.CharField(max_length=10)
+	imagen_cat = models.ImageField(upload_to='cat_productos', null=False, default="")
+	tipo = models.CharField(max_length=2, choices=tipo_p, default='VI')
 	def __unicode__(self):
 		return "%s"%(self.nombre)
 
-    
+medida_agua = (("B","Bajo"),('M','Medio'),('A','Alto'))
+
 class producto(models.Model):
 	codigo = models.CharField(max_length=5)
+	nombre = models.CharField(max_length=20, default="")
 	nombre_comun = models.CharField(max_length=20)
 	nombre_cientifico = models.CharField(max_length=20)
-	familia = models.CharField(max_length=10)
-	origen = models.CharField(max_length=10)
-	detalle = models.CharField(max_length=200)
+	#familia = models.CharField(max_length=10)
+	#origen = models.CharField(max_length=10)
+	altura_maxima = models.CharField(max_length=10)
+	agua = models.CharField(max_length=1, choices=medida_agua, default='B')
+	sol = models.CharField(max_length=1, choices=medida_agua, default='B')
+	crecimiento = models.CharField(max_length=5, default="")
+	detalle = models.CharField(max_length=5000)
 	costo = models.FloatField()
 	cantidad = models.FloatField()
 	imagen = models.ImageField(upload_to='productos')
-	variedad = models.ForeignKey(variedad)
+	imagen1 = models.ImageField(upload_to='productos', default="")
+	imagen2 = models.ImageField(upload_to='productos', default="")
+	variedad = models.ForeignKey(variedad, db_column='variedad_id')
 	cat_producto = models.ForeignKey(cat_producto)
 	def __unicode__(self):
 		return "%s-%s"%(self.codigo,self.nombre_comun)
@@ -114,8 +122,10 @@ class foro(models.Model):
 	
 class comentario(models.Model):
 	tema = models.CharField(max_length=10)
-	fecha = models.DateField()
-	descripcion = models.CharField(max_length=200)
+	fecha = models.DateTimeField()
+	descripcion = models.CharField(max_length=1000)
+	cproducto = models.ForeignKey(producto, null=True)
+	cusuario = models.ForeignKey(User, null=True)
 	def __unicode__(self):
 		return "%s"%(self.tema)	
 
@@ -134,11 +144,22 @@ class menu(models.Model):
 		return str(self.nombre)
 
 class elmolino(models.Model):
-	nombre = models.CharField(max_length=10)
-	texto = models.CharField(max_length=1500)
-	def __unicode__(self):
-		return str(self.nombre)
+	historia= models.CharField(max_length=5000, default="")
+	mision = models.CharField(max_length=5000, default="")
+	vision = models.CharField(max_length=5000, default="")
+	direccion = models.CharField(max_length=5000, default="")
+	telefono = models.CharField(max_length=5000, default="")
+	correo = models.CharField(max_length=5000, default="")
+	mapa = models.CharField(max_length=5000, default="")
+	#def __unicode__(self):
+	#	return str(self.)
 
+
+class siguenos(models.Model):
+	red = models.CharField(max_length=5000)
+	url = models.CharField(max_length=5000)
+	imagen = models.ImageField(upload_to='red', default="")
+	
 
 class oferta(models.Model):
 	nombre = models.CharField(max_length=1500)

@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0012_elmolino'),
+        ('web', '0008_auto_20150129_0133'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='elmolino',
-            name='texto',
-            field=models.CharField(max_length=500),
+            model_name='comentario',
+            name='fecha',
+            field=models.DateTimeField(),
             preserve_default=True,
         ),
     ]

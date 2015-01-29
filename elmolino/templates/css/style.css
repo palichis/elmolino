@@ -3,14 +3,36 @@
     height: 100%;
     margin: 0 auto;
     width: 1024px;
+    background: #DBFDD3;
 }
 
 #header {
     background: url("/static/img/header.png") no-repeat;
-    height: 265px;
+    height: 181px;
 }
 
 ul{
     list-style:none;
     margin-left: -38px;
+}
+
+
+#izquierda {
+    float: right;
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    margin: 0 0 0 20px;
+}
+
+#derecha{
+	width: 70%;
+
+}
+
+#content{
+	width: 100%;
+	height: 100%;
+	/*text-shadow: 0 -2px 1px #000000;
+
 }

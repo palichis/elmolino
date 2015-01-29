@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
-    <title>ResponsiveSlides.js &middot; Responsive jQuery slideshow</title>
+    <title>Vivero "EL MOLINO"</title>
     <link rel="stylesheet" href="static/js/responsiveslides.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="/static/js/jquery.min.js"></script>
@@ -26,10 +26,16 @@
       <div id="content">
 	<p style="font-size-adjust: 1.1;">{% block title%}{% endblock%}</p><br>
 	<p align="justify">{% block content%}{% endblock%}</p>
+	{% block categoria%}{% endblock%}
+	{% block producto%}{% endblock%}
       </div>
       <div>
 	{% block imgmenu%}{% endblock%}
       </div>
+      <div>
+      	{% block foother%}{% endblock%}
     </div>
+    </div>
+    
   </body>
 </html>

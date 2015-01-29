@@ -2,21 +2,19 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import datetime
-from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0007_auto_20150125_0233'),
+        ('web', '0005_siguenos_imagen'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='menu',
-            name='nivel',
-            field=models.IntegerField(default=1),
-            preserve_default=False,
+            model_name='comentario',
+            name='cproducto',
+            field=models.ForeignKey(to='web.producto', null=True),
+            preserve_default=True,
         ),
     ]

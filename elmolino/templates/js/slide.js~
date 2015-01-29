@@ -7,6 +7,12 @@
             speed: 800
 	});
 
+ 	// Slideshow 1
+	$("#slider11").responsiveSlides({
+            maxwidth: 30,
+            speed: 800
+	});
+
       // Slideshow 2
 	$("#slider2").responsiveSlides({
             auto: false,

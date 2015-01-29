@@ -7,14 +7,14 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0008_menu_nivel'),
+        ('web', '0004_elmolino_mapa'),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='menu',
-            name='nivel',
-            field=models.SmallIntegerField(),
+        migrations.AddField(
+            model_name='siguenos',
+            name='imagen',
+            field=models.ImageField(default=b'', upload_to=b'red'),
             preserve_default=True,
         ),
     ]
