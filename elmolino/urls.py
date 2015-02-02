@@ -10,5 +10,9 @@ urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^$', home),
                        url(r'^vivero', vivero),
-                       
+                       url(r'^huerto', huerto),
+                       url(r'^servicios', servicios),
+                       url(r'^el_molino', el_molino),
+                       url(r'^login', login),
+                       url(r'^salir', salir),
 )

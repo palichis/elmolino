@@ -23,23 +23,16 @@
   <div id="derecha">
     <h3>{{producto.nombre}}</h3>
     <p>
-      <div>
+      <!--<div>
 	<img style="float:left; margin-right:30px;margin-left:30px" src=/static/{{producto.imagen2}}  height="220" width="220">
-      </div>
+      </div>-->
       <strong>C&oacute;digo:</strong> {{producto.codigo|safe}}<br>
       <strong>Nombre</strong>: {{producto.nombre|safe}}<br>
-      <strong>Nombre Com&uacute;n</strong>: {{producto.nombre_comun|safe}}<br>
-      <strong>Nombre Cient&iacute;fico</strong>: {{producto.nombre_cientifico|safe}}<br>
-      <strong>Antura M&aacute;xima</strong>: {{producto.altura_maxima|safe}}<br>
-      <strong>Agua</strong>: {{producto.agua|safe}}<br>
-      <strong>Sol</strong>: {{producto.sol|safe}}<br>
-      <strong>Crecimiento</strong>: {{producto.crecimiento|safe}}<br>
       <strong>Costo</strong>: {{producto.costo|safe}}<br>
-      <strong>Variedad</strong>: {{producto.variedad|safe}}<br>
-      <strong>Existencias</strong>: {{producto.cantidad|safe}}<br>
+      <strong>Tiempo</strong>: {{producto.duracion|safe}}<br>
     </p>
     <p>
-      <strong>Detalle</strong>: <p style="text-align:justify">{{producto.detalle|safe}}</p><br>
+      <strong>Detalle</strong>: <p style="text-align:justify">{{producto.descripcion|safe}}</p><br>
     </p>
   </div>
   <strong>Comentarios</strong>

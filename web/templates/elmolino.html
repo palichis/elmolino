@@ -12,33 +12,23 @@
 {% endblock%}
 
 {% block content%}
-<table style="width:100%">
-  <tr>
-    {% for i in content%}
-    <td valign="top" style="width:33%; text-align:left; background:#73ffba"><p style="margin:3px; font-size-adjust: 0.8;"><a href=/foro?id={{i.id}}>{{i.tema}}</a></p>
-      <p style="text-align: justify; margin:10px">{{i.comentario}}</p>
-    </td>
-    {% endfor %}
-  </tr>
-</table>
-{% endblock%}
-{% block title%}
-<p style="font-size-adjust: 1.1;">
-  {{title|safe}}
-<p/>
+
+<div style="margin-left:5px">
+  <h3>Historia</h3>
+  <div>
+    <p style="width:95%; text-align:justify;">{{content.historia|safe}}</p>
+  </div>
+  <h3>Misión</h3>
+  <div>
+    <p style="width:95%; text-align:justify;">{{content.mision|safe}}</p>
+  </div>
+  <h3>Visión</h3>
+  <div>
+    <p style="width:95%; text-align:justify;">{{content.vision|safe}}</p>
+  </div>
+</div>
 {% endblock%}
 
-{% block imgmenu%}
-<h3>PRODUCTOS Y SERVICIOS</3>
-<table style="width:100%">
-  <tr>
-    {% for i in img%}
-    <td style="width:33%; text-align:center"><a href=/{{i.nombre}}><img src=/static/{{i.imagen}}  height="300" width="300"></a>
-    </td>
-    {% endfor %}
-  </tr>
-</table>
-{% endblock%}
 {% block foother%}
 <table style="width:100%; background:#204609">
   

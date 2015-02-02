@@ -8,6 +8,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('auth', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -17,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('codigo', models.FloatField(max_length=20)),
-                ('fecha', models.DateField()),
+                ('fecha', models.DateField(auto_now_add=True)),
                 ('valor_total', models.FloatField(max_length=20)),
             ],
             options={
@@ -28,10 +29,11 @@ class Migration(migrations.Migration):
             name='cat_foro',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('fecha', models.DateField()),
+                ('fecha', models.DateField(auto_now_add=True)),
                 ('nombre', models.CharField(max_length=20)),
                 ('descripcion', models.CharField(max_length=20)),
-                ('cat_foro_padre', models.ForeignKey(to='web.cat_foro')),
+                ('cat_foro_padre', models.ForeignKey(blank=True, to='web.cat_foro', null=True)),
+                ('cliente', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },
@@ -54,6 +56,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('nombre', models.CharField(max_length=10)),
+                ('imagen_cat', models.ImageField(upload_to=b'servicio')),
                 ('codigo', models.CharField(max_length=5)),
             ],
             options={
@@ -80,8 +83,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('tema', models.CharField(max_length=10)),
-                ('fecha', models.DateField()),
-                ('descripcion', models.CharField(max_length=200)),
+                ('fecha', models.DateTimeField(auto_now_add=True)),
+                ('descripcion', models.CharField(max_length=1000)),
             ],
             options={
             },
@@ -92,7 +95,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('costo_total', models.FloatField(max_length=20)),
-                ('fecha', models.DateField()),
+                ('fecha', models.DateField(auto_now_add=True)),
                 ('cliente', models.ForeignKey(to='web.cliente')),
             ],
             options={
@@ -105,7 +108,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('cantidad', models.FloatField()),
                 ('valor_unitario', models.FloatField()),
-                ('cotizacion', models.ForeignKey(db_column=b'cotizacion_id', blank=True, to='web.cotizacion', null=True)),
+                ('cotizacion', models.ForeignKey(to='web.cotizacion', db_column=b'cotizacion_id')),
             ],
             options={
             },
@@ -115,8 +118,13 @@ class Migration(migrations.Migration):
             name='elmolino',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('nombre', models.CharField(max_length=10)),
-                ('texto', models.CharField(max_length=1500)),
+                ('historia', models.CharField(max_length=5000)),
+                ('mision', models.CharField(max_length=5000)),
+                ('vision', models.CharField(max_length=5000)),
+                ('direccion', models.CharField(max_length=5000)),
+                ('telefono', models.CharField(max_length=5000)),
+                ('correo', models.CharField(max_length=5000)),
+                ('mapa', models.CharField(max_length=5000)),
             ],
             options={
             },
@@ -126,7 +134,7 @@ class Migration(migrations.Migration):
             name='foro',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('fecha', models.DateField()),
+                ('fecha', models.DateField(auto_now_add=True)),
                 ('tema', models.CharField(max_length=20)),
                 ('comentario', models.CharField(max_length=200)),
                 ('cat_foro', models.ForeignKey(to='web.cat_foro', db_column=b'cat_foro_id')),
@@ -153,7 +161,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('nombre', models.CharField(max_length=10)),
                 ('url', models.CharField(max_length=10)),
-                ('nivel', models.SmallIntegerField(null=True, blank=True)),
+                ('nivel', models.SmallIntegerField(default=1)),
+                ('acceso', models.ForeignKey(default=b'', blank=True, to='auth.Group', null=True)),
                 ('padre', models.ForeignKey(blank=True, to='web.menu', null=True)),
             ],
             options={
@@ -176,14 +185,14 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('codigo', models.CharField(max_length=5)),
-                ('nombre', models.CharField(default=b'', max_length=20)),
-                ('nombre_comun', models.CharField(max_length=20)),
+                ('nombre', models.CharField(max_length=20)),
+                ('nombre_comun', models.CharField(max_length=20, null=True, blank=True)),
                 ('nombre_cientifico', models.CharField(max_length=20)),
-                ('altura_maxima', models.CharField(max_length=10)),
+                ('altura_maxima', models.CharField(max_length=10, null=True, blank=True)),
                 ('agua', models.CharField(default=b'B', max_length=1, choices=[(b'B', b'Bajo'), (b'M', b'Medio'), (b'A', b'Alto')])),
                 ('sol', models.CharField(default=b'B', max_length=1, choices=[(b'B', b'Bajo'), (b'M', b'Medio'), (b'A', b'Alto')])),
-                ('crecimiento', models.CharField(default=b'', max_length=5)),
-                ('detalle', models.CharField(max_length=200)),
+                ('crecimiento', models.CharField(max_length=5, null=True, blank=True)),
+                ('detalle', models.CharField(max_length=5000)),
                 ('costo', models.FloatField()),
                 ('cantidad', models.FloatField()),
                 ('imagen', models.ImageField(upload_to=b'productos')),
@@ -199,12 +208,24 @@ class Migration(migrations.Migration):
             name='servicio',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('codigo', models.CharField(max_length=5)),
+                ('codigo', models.CharField(max_length=6)),
                 ('nombre', models.CharField(max_length=20)),
-                ('costo', models.FloatField(max_length=20)),
-                ('tiempo', models.DateTimeField()),
-                ('descripcion', models.CharField(max_length=200)),
+                ('costo', models.FloatField()),
+                ('duracion', models.CharField(max_length=10)),
+                ('descripcion', models.CharField(max_length=2000)),
                 ('cat_servicio', models.ForeignKey(to='web.cat_servicio')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='siguenos',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('red', models.CharField(max_length=5000)),
+                ('url', models.CharField(max_length=5000)),
+                ('imagen', models.ImageField(upload_to=b'red')),
             ],
             options={
             },
@@ -215,11 +236,11 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('nombre', models.CharField(max_length=20)),
-                ('origen', models.CharField(max_length=20)),
-                ('situacion', models.CharField(max_length=20)),
-                ('cultivo', models.CharField(max_length=20)),
-                ('poda', models.CharField(max_length=20)),
-                ('multiplicacion', models.CharField(max_length=20)),
+                ('origen', models.CharField(max_length=20, null=True, blank=True)),
+                ('situacion', models.CharField(max_length=20, null=True, blank=True)),
+                ('cultivo', models.CharField(max_length=20, null=True, blank=True)),
+                ('poda', models.CharField(max_length=20, null=True, blank=True)),
+                ('multiplicacion', models.CharField(max_length=20, null=True, blank=True)),
             ],
             options={
             },
@@ -234,7 +255,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='cotizacion_detalle',
             name='producto',
-            field=models.ForeignKey(to='web.producto', db_column=b'product_id'),
+            field=models.ForeignKey(db_column=b'product_id', blank=True, to='web.producto', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -244,9 +265,21 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='cat_foro',
-            name='cliente',
-            field=models.ForeignKey(to='web.cliente'),
+            model_name='comentario',
+            name='cproducto',
+            field=models.ForeignKey(blank=True, to='web.producto', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='comentario',
+            name='cservicio',
+            field=models.ForeignKey(blank=True, to='web.servicio', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='comentario',
+            name='cusuario',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
         migrations.AddField(
