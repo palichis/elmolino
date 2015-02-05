@@ -3,6 +3,7 @@ from web.models import *
 # Register your models here.
 
 admin.site.register(galeria)
+admin.site.register(carrito)
 admin.site.register(cliente)
 admin.site.register(variedad)
 admin.site.register(cat_producto)

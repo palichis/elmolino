@@ -1,0 +1,72 @@
+{% extends "index.html"%}
+{% block slider%}
+{{slide|safe}}
+{% endblock%}
+
+{% block menu%}
+<div id="cssmenu">
+  <ul>
+    {{menu|safe}}
+  </ul>
+</div>
+{% endblock%}
+
+{% block content%}
+<script type="text/javascript">
+function executeOnSubmit()
+{
+        var status = checkField();
+
+        if(status[0] == 0)
+        {
+                alert(status[1]);
+                return false;
+        }
+
+        var res = confirm("Esta seguro de crear usuario?");
+
+        if(res)
+                return true;
+        else
+                return false;
+}
+
+function checkField()
+{
+        var check = new Array();
+        var elemValue = document.getElementById("id_password1").value;
+		var elemValue1 = document.getElementById("id_password2").value;
+        if(elemValue != elemValue1) {
+                check[0] = 0;
+                check[1] = "password no coinciden!!!";
+        }
+
+        return check;
+}
+
+</script>
+<div style="margin-left: 25%;margin-bottom: 40px;margin-top: 40px;">
+	<form id='formulario' method='post' action=''>
+	  <table>
+	    {{content|safe}}
+	    <tr><td><input type='submit' id="submit" value='Ingresarx'/></td></tr>
+	  </table>
+	</form>
+</div>
+{% endblock%}
+
+{% block foother%}
+<table style="width:100%; background:#204609">
+  
+  <tr>
+    <td valign="top" style="width:33%; text-align:left; color: #A6C43E;"><strong>Contáctenos:</strong><br>{{foother.direccion}}<br>{{foother.telefono}}<br><a href=mailto:{{foother.correo}}>{{foother.correo}}</a>    </td>
+    <td style="width:33%; text-align:left">{{foother.mapa|safe}}    </td>
+    <td valign="top" style="width:33%; text-align:center">
+    {% for r in red%}
+    <a href={{r.url}}><img src=/static/{{r.imagen|safe}}></a>    
+    {% endfor%}
+    </td>
+  </tr>
+
+</table>
+{% endblock%}

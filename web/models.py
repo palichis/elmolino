@@ -77,14 +77,14 @@ class servicio(models.Model):
 		return "%s-%s"%(self.codigo,self.nombre)
 
 class carrito(models.Model):
-	codigo = models.FloatField(max_length=20)
+	codigo = models.CharField(max_length=20)
 	fecha = models.DateField(auto_now=False, auto_now_add=True)
-	valor_total = models.FloatField(max_length=20)
+	cantidad = models.IntegerField(max_length=20)
 	usuario = models.ForeignKey(User)
 	producto = models.ForeignKey(producto, db_column='product_id', null=True, blank=True)
 	servicio = models.ForeignKey(servicio, db_column='servicio_id',null=True, blank=True)
 	def __unicode__(self):
-		return "%s %s"%(self.codigo,self.apellido)	
+		return "%s %s"%(self.codigo,self.producto)	
 
 class cotizacion(models.Model): 
 	costo_total = models.FloatField(max_length=20)
@@ -140,7 +140,7 @@ class galeria(models.Model):
 
 class menu(models.Model):
 	nombre = models.CharField(max_length=10)
-	url = models.CharField(max_length=10)
+	url = models.CharField(max_length=30)
 	padre = models.ForeignKey('self', null=True, blank=True)
         acceso = models.ForeignKey(Group, null=True, blank=True, default="")
 	nivel = models.SmallIntegerField(default=1)

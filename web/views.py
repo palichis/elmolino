@@ -4,6 +4,9 @@ from web.models import *
 from django.contrib.auth.models import User,Group
 from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 # Create your views here.
 
@@ -22,10 +25,11 @@ def menus(objeto,request):
     #    return ""
     if menu_db:
         for padre in menu_db:
+            if request.user.is_authenticated() and padre.nombre == 'Ingresar':
+                break
             barra = barra + "<li class='has-sub'><a href='%s'><span>%s</span></a>"%(padre.url,padre.nombre)
             if request.user.is_authenticated():
                 grupo = Group.objects.all()
-                print grupo
             sub_menu = menu.objects.filter(padre=padre.id)
             if sub_menu:
                 barra = barra + '<ul>'
@@ -70,8 +74,22 @@ def productos(object):
                 p_producto = producto.objects.filter(id = request.GET['id'])[0]
             else:
                 p_producto = prod[0]
+            if request.user.is_authenticated():
+                agregar = "<a href=%s?cat=%s&id=%s&agregar=true>agregar carrito</a>"%(request.path,request.GET['cat'],p_producto.id)
             coment = comentario.objects.filter(cproducto = p_producto.id)
-            return render_to_response('producto.html',{'menu':men, 'lista':prod, 'producto': p_producto, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment})
+            if 'agregar' in request.GET:
+                carto = carrito.objects.filter(producto = p_producto.id, usuario = request.user)
+                if carto:
+                    carto[0].cantidad = carto[0].cantidad + 1
+                    carto[0].save()
+                else:
+                    mascar = carrito()
+                    mascar.codigo  = request.user.id
+                    mascar.cantidad = 1
+                    mascar.usuario = request.user
+                    mascar.producto = p_producto
+                    mascar.save()
+            return render_to_response('producto.html',{'menu':men, 'lista':prod, 'producto': p_producto, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar' : agregar})
 
 
 def cservicios(object):
@@ -79,6 +97,7 @@ def cservicios(object):
     hist,redes,men = general(request)
     coment = ''
     if 'cat' in request.GET:
+        
         cserv = cat_servicio.objects.filter(nombre = request.GET['cat'])
         serv = servicio.objects.filter(cat_servicio = cserv[0].id).order_by('nombre')
         if serv:
@@ -86,8 +105,22 @@ def cservicios(object):
                 p_servicio = servicio.objects.filter(id = request.GET['id'])[0]
             else:
                 p_servicio = serv[0]
+            if request.user.is_authenticated():
+                agregar = "<a href=%s?cat=%s&id=%s&agregar=true>agregar carrito</a>"%(request.path,request.GET['cat'],p_servicio.id)
             coment = comentario.objects.filter(cservicio = p_servicio.id)
-            return render_to_response('servicio.html',{'menu':men, 'lista':serv, 'producto': p_servicio, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment})
+            if 'agregar' in request.GET:
+                carto = carrito.objects.filter(servicio = p_servicio.id, usuario = request.user)
+                if carto:
+                    carto[0].cantidad = carto[0].cantidad + 1
+                    carto[0].save()
+                else:
+                    mascar = carrito()
+                    mascar.codigo  = request.user.id
+                    mascar.cantidad = 1
+                    mascar.usuario = request.user
+                    mascar.servicio = p_servicio
+                    mascar.save()
+            return render_to_response('servicio.html',{'menu':men, 'lista':serv, 'producto': p_servicio, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar':agregar})
 
 
 def huerto(request):
@@ -130,9 +163,19 @@ def home(request):
     return render_to_response('home.html',{'slide':html, 'menu':men, 'content': noticias, 'title': 'Noticias', 'img': ofer, 'foother': hist, 'red':redes})
 
 
-def login(request):
+def entrar(request):
     hist,redes,men = general(request)
-    return False
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/')
+    else:
+        formulario = AuthenticationForm()
+    return render_to_response('login.html',{'menu':men, 'content': formulario, 'foother': hist, 'red':redes})
 
 def salir(request):
     hist,redes,men = general(request)
@@ -142,3 +185,26 @@ def salir(request):
 def el_molino(request):
     hist,redes,men = general(request)
     return render_to_response('elmolino.html',{'menu':men, 'content': hist, 'foother': hist, 'red':redes})
+
+
+def carr(request):
+    hist,redes,men = general(request)
+    if request.user.is_authenticated():
+        img = '/static/img/carrito.png'
+        num = carrito.objects.filter(usuario = request.user.id)
+        numero = 0
+        for n in num:
+            numero = numero + n.cantidad
+    return render_to_response('carrito.html',{'imagen':img, 'numero': numero})
+
+@login_required
+def compras(request):
+    hist,redes,men = general(request)
+    obj_car = ''
+    if 'eliminar' in request.GET:
+        if carrito.objects.filter(id = request.GET['eliminar']):
+            obj_car = carrito.objects.get(id=request.GET['eliminar'])
+        if obj_car:
+            obj_car.delete()
+    car = carrito.objects.filter(usuario = request.user.id)
+    return render_to_response('compras.html',{'menu':men, 'content': car, 'foother': hist, 'red':redes})

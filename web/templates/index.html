@@ -9,6 +9,14 @@
     <script src="/static/js/responsiveslides.min.js"></script>
     <script src="/static/js/slide.js"></script>
     <link rel="stylesheet" href="/static/css/styles_menu.css">
+
+    <script type="text/javascript">
+      var refreshId = setInterval(function()
+      {
+      $('#carrito').load('/carrito');
+      },
+      1000);
+    </script>
     
     <script src="/static/js/script.js"></script>
 
@@ -17,6 +25,7 @@
   <body>
     <div id="all">
       <div id="header">
+	<div id="carrito" style="float:right;"></div>
       </div>
       {% block menu%}{% endblock%}
       <!-- Slideshow 1 -->

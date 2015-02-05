@@ -1,0 +1,83 @@
+{% extends "index.html"%}
+{% block slider%}
+{{slide|safe}}
+{% endblock%}
+
+{% block menu%}
+<div id="cssmenu">
+  <ul>
+    {{menu|safe}}
+  </ul>
+</div>
+{% endblock%}
+
+{% block content%}
+
+</script>
+
+<div style="margin: 10px;">
+  <form id='formulario' method='post' action=''>
+    <table style="width: 100%">
+      <tr style="background:#ccf">
+	<td>
+	  Producto / servicio
+	</td>
+	<td>
+	  Cantidad
+	</td>
+	<td>
+	  Costo unitario
+	</td>
+	<td>
+	  Eliminar
+	</td>
+      </tr>
+      {% for r in content%}
+      <tr style="background:#fff">
+	<td>
+	  {% if r.producto%}
+	  {{r.producto|safe}}
+	  {% endif%}
+	  {% if r.servicio %}
+	  {{r.servicio|safe}}
+	  {% endif%}
+	</td>
+	<td>
+	  <input id="id_codigo" type="number" value={{r.cantidad}} step="any" name="codigo">
+	</td>
+	<td>
+	  {% if r.producto%}
+	  {{r.producto.costo|safe}}
+	  {% endif%}
+	  {% if r.servicio%}
+	  {{r.servicio.costo|safe}}
+	  {% endif%}
+	</td>
+	<td>
+	  <a href=?eliminar={{r.id}}>eliminar</a>
+	</td>
+      </tr>
+      {% endfor%}
+      <td>
+	<input type='submit' id="submit" value='Registrar'/>
+      </td>
+    </table>
+  </form>
+</div>
+{% endblock%}
+
+{% block foother%}
+<table style="width:100%; background:#204609">
+  
+  <tr>
+    <td valign="top" style="width:33%; text-align:left; color: #A6C43E;"><strong>Contáctenos:</strong><br>{{foother.direccion}}<br>{{foother.telefono}}<br><a href=mailto:{{foother.correo}}>{{foother.correo}}</a>    </td>
+    <td style="width:33%; text-align:left">{{foother.mapa|safe}}    </td>
+    <td valign="top" style="width:33%; text-align:center">
+    {% for r in red%}
+    <a href={{r.url}}><img src=/static/{{r.imagen|safe}}></a>    
+    {% endfor%}
+    </td>
+  </tr>
+
+</table>
+{% endblock%}

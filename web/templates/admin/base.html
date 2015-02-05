@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+{% load admin_static %}{% load url from future %}
+
+{% load i18n %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <title>{% block title %}{% endblock %}</title>
+    {% block extrahead %}{% endblock %}
+    <script src='http://code.jquery.com/jquery-latest.min.js' type='textjavascript'/>
+    <script type='textjavascript'>
+      // IJ tutorials //<![CDATA[
+    $(function() {
+        if ($.browser.msie && $.browser.version.substr(0,1)<7)
+        {
+        $('li').has('ul').mouseover(function(){
+            $(this).children('ul').css('visibility','visible');
+            }).mouseout(function(){
+            $(this).children('ul').css('visibility','hidden');
+            })
+        }
+        /* Mobile */
+        $('#menu-wrap').prepend('<div id="menu-trigger">Menu</div>');      
+        $("#menu-trigger").on("click", function(){
+            $("#menu").slideToggle();
+        });
+
+        // iPad
+        var isiPad = navigator.userAgent.match(/iPad/i) != null;
+        if (isiPad) $('#menu ul').addClass('no-transition');    
+    });     
+//]]> 
+      $('.tab').click(function() {
+      $(this).addClass('active').siblings().removeClass('active');
+      })
+    </script>
+
+  </head>
+  <body>  
+    <div id="cuerpo">
+      <div id = "header">
+	<div id="logo">
+	  <a href="/"><center><img src="/static/ic_launcher.png"></center></a>
+	  </div>
+	  <div id=header-name>
+	    
+	    <div >
+	      <div id="branding">
+		<div id="title">KAtari Turnos</br></div>
+	    </div>
+	    {% if user.is_active and user.is_staff %}
+	    <div id="user-tools">
+	      {% trans 'Bienvenido,' %}
+	      <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.
+	      {% block userlinks %}
+	      {% url 'django-admindocs-docroot' as docsroot %}
+	      {% if docsroot %}
+	      <a href="{{ docsroot }}">{% trans 'Documentation' %}</a> 
+	      {% endif %}
+	      <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> 
+	      <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+	      {% endblock %}
+	    </div>
+	    {% endif %}
+	    {% block nav-global %}{% endblock %}
+	  </div>
+	</div>
+	<div id="menu-header">
+	  {% block breadcrumbs %}
+	  <nav id="menu-wrap">
+	    <ul id="map">
+	      <div id="menu" >
+		<li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+		</li>
+		{% if title %} &rsaquo;
+		<li> {{ title }}
+		</li>{% endif %}
+	      </div>
+	    </ul>
+	  </nav>
+	  {% endblock %}
+	</div>
+      </div>
+      <div id="content">
+	<div>
+	  <div id="derechaadmin"> 
+	    {% block contentde %} <!-- Content -->
+	    <div  class="{% block coltype %}colM{% endblock %}">
+	      {% block pretitle %}{% endblock %}
+	      {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+	      {% block content %}
+	      {% block object-tools %}{% endblock %}
+	      {{ content }}
+	      {% endblock %}
+	      {% block sidebar %}{% endblock %}
+	      <br class="clear" />
+	    </div>
+	    <!-- END Content -->
+	    {% endblock %}
+	  </div>
+	</div>
+      </div>
+      <div id=footer>
+		<div id="credits">
+			Desarrollado por
+			<a href="http://katarisoft.com">KatariSoft</a>
+			| Katari_turnos GPL V3
+		</div>
+      </div>
+    </div>
+  </body>
+</html>
