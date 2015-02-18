@@ -27,6 +27,19 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail.
+EMAIL_HOST = 'mail.katarisoft.net'
+
+# Port for sending e-mail.
+EMAIL_PORT = 2525
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'palichis@solid-ec.org'
+EMAIL_HOST_PASSWORD = '@lemuria'
+EMAIL_USE_TLS = False
+
 # Application definition
 
 INSTALLED_APPS = (

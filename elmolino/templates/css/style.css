@@ -3,7 +3,7 @@
     height: 100%;
     margin: 0 auto;
     width: 1024px;
-    background: #DBFDD3;
+    background: #64a33a;
 }
 
 #header {
@@ -13,7 +13,7 @@
 
 ul{
     list-style:none;
-    margin-left: -38px;
+    margin-left: -40px;
 }
 
 

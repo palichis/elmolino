@@ -12,10 +12,10 @@
 {% endblock%}
 
 {% block content%}
-<table style="width:100%">
+<table style="width:100%; margin: -5px">
   <tr>
     {% for i in content%}
-    <td valign="top" style="width:33%; text-align:left; background:#73ffba"><p style="margin:3px; font-size-adjust: 0.8;"><a href=/foro?id={{i.id}}>{{i.tema}}</a></p>
+    <td valign="top" style="width:33%; text-align:left; background:url(/static/img/fondo.png) repeat scroll 0 0 rgba(0, 0, 0, 0)"><p style="margin:3px; font-size-adjust: 0.8;"><a href=/foro?id={{i.id}}>{{i.tema}}</a></p>
       <p style="text-align: justify; margin:10px">{{i.comentario}}</p>
     </td>
     {% endfor %}

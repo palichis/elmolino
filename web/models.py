@@ -79,10 +79,11 @@ class servicio(models.Model):
 class carrito(models.Model):
 	codigo = models.CharField(max_length=20)
 	fecha = models.DateField(auto_now=False, auto_now_add=True)
-	cantidad = models.IntegerField(max_length=20)
+	cantidad = models.IntegerField()
 	usuario = models.ForeignKey(User)
 	producto = models.ForeignKey(producto, db_column='product_id', null=True, blank=True)
 	servicio = models.ForeignKey(servicio, db_column='servicio_id',null=True, blank=True)
+        total = models.FloatField()
 	def __unicode__(self):
 		return "%s %s"%(self.codigo,self.producto)	
 
@@ -95,10 +96,11 @@ class cotizacion(models.Model):
 
 	
 class cotizacion_detalle(models.Model): 
-	cantidad = models.FloatField()
+	cantidad = models.IntegerField()
 	valor_unitario= models.FloatField()
 	producto = models.ForeignKey(producto, db_column='product_id', null=True, blank=True)
 	servicio = models.ForeignKey(servicio, db_column='servicio_id',null=True, blank=True)
+        total =  models.FloatField()
 	cotizacion = models.ForeignKey(cotizacion,db_column='cotizacion_id')
 
 

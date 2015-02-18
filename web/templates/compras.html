@@ -16,8 +16,8 @@
 </script>
 
 <div style="margin: 10px;">
-  <form id='formulario' method='post' action=''>
-    <table style="width: 100%">
+  <table style="width: 100%">
+    <form id="formulario" action='/compras/evento/' method='post'>
       <tr style="background:#ccf">
 	<td>
 	  Producto / servicio
@@ -27,6 +27,9 @@
 	</td>
 	<td>
 	  Costo unitario
+	</td>
+	<td>
+	  Costo Total
 	</td>
 	<td>
 	  Eliminar
@@ -43,7 +46,7 @@
 	  {% endif%}
 	</td>
 	<td>
-	  <input id="id_codigo" type="number" value={{r.cantidad}} step="any" name="codigo">
+	  <input id=id_codigo{{r.id}} type="number" value={{r.cantidad}} step="any" name=codigo{{r.id}}>
 	</td>
 	<td>
 	  {% if r.producto%}
@@ -54,15 +57,27 @@
 	  {% endif%}
 	</td>
 	<td>
-	  <a href=?eliminar={{r.id}}>eliminar</a>
+	  {{r.total}}
+	</td>
+	<td>
+	  <a href=?eliminar={{r.id}}><img src="/static/img/eliminar.png" border="0"></a>
 	</td>
       </tr>
       {% endfor%}
       <td>
-	<input type='submit' id="submit" value='Registrar'/>
+	<input type='submit' id="submit" value='Actualizar' name="actualizar"/>
+	<input type='submit' id="submit" value='Cotizar' name="cotizar"/>
+	<input type='submit' id="submit" value='Eliminar' name="eliminar"/>
       </td>
+      <td>
+      </td>
+      <td>
+      </td>
+      <td>
+	total = {{total}}
+      </td>
+      </form>
     </table>
-  </form>
 </div>
 {% endblock%}
 

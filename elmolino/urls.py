@@ -16,6 +16,7 @@ urlpatterns = patterns('',
                        url(r'^entrar', entrar),
                        url(r'^salir', salir),
                        url(r'^carrito', carr),
-                       url(r'^compras', compras),
+                       url(r'^compras/$', compras),
+                       url(r'^compras/evento/$', evento_carrito),
                        (r'^accounts/login/$', 'django.contrib.auth.views.login'),
 )

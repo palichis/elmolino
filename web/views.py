@@ -7,6 +7,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
+from django.core.mail import send_mail
+import pdb
 
 # Create your views here.
 
@@ -66,6 +68,7 @@ def productos(object):
     request = object
     hist,redes,men = general(request)
     coment = ''
+    agregar = ''
     if 'cat' in request.GET:
         cprod = cat_producto.objects.filter(nombre = request.GET['cat'])
         prod = producto.objects.filter(cat_producto = cprod[0].id).order_by('nombre')
@@ -81,6 +84,7 @@ def productos(object):
                 carto = carrito.objects.filter(producto = p_producto.id, usuario = request.user)
                 if carto:
                     carto[0].cantidad = carto[0].cantidad + 1
+                    carto[0].total = (carto[0].cantidad) * p_producto.costo
                     carto[0].save()
                 else:
                     mascar = carrito()
@@ -88,6 +92,7 @@ def productos(object):
                     mascar.cantidad = 1
                     mascar.usuario = request.user
                     mascar.producto = p_producto
+                    mascar.total = 1 * p_producto.costo
                     mascar.save()
             return render_to_response('producto.html',{'menu':men, 'lista':prod, 'producto': p_producto, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar' : agregar})
 
@@ -112,6 +117,7 @@ def cservicios(object):
                 carto = carrito.objects.filter(servicio = p_servicio.id, usuario = request.user)
                 if carto:
                     carto[0].cantidad = carto[0].cantidad + 1
+                    carto[0].total = (carto[0].cantidad) * p_servicio.costo
                     carto[0].save()
                 else:
                     mascar = carrito()
@@ -119,6 +125,7 @@ def cservicios(object):
                     mascar.cantidad = 1
                     mascar.usuario = request.user
                     mascar.servicio = p_servicio
+                    mascar.total = 1 * p_servicio.costo
                     mascar.save()
             return render_to_response('servicio.html',{'menu':men, 'lista':serv, 'producto': p_servicio, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar':agregar})
 
@@ -152,14 +159,12 @@ def servicios(request):
 
 def home(request):
     hist,redes,men = general(request)
-    print redes
     html = slide()
     ofer = oferta.objects.all()
     catforo = cat_foro.objects.filter(nombre = 'noticias')[0]
     noticias = foro.objects.filter(cat_foro = catforo.id)
     if len(noticias) > 3:
         noticias[-3:]
-    print noticias
     return render_to_response('home.html',{'slide':html, 'menu':men, 'content': noticias, 'title': 'Noticias', 'img': ofer, 'foother': hist, 'red':redes})
 
 
@@ -199,6 +204,8 @@ def carr(request):
 
 @login_required
 def compras(request):
+    if request.method == 'POST':
+        print request.POST
     hist,redes,men = general(request)
     obj_car = ''
     if 'eliminar' in request.GET:
@@ -207,4 +214,58 @@ def compras(request):
         if obj_car:
             obj_car.delete()
     car = carrito.objects.filter(usuario = request.user.id)
-    return render_to_response('compras.html',{'menu':men, 'content': car, 'foother': hist, 'red':redes})
+    total = 0
+    for i in car:
+        total = total + i.total
+    return render_to_response('compras.html',{'menu':men, 'content': car, 'foother': hist, 'red':redes, 'total':total})
+
+
+def evento_carrito(request):
+    if request.method == 'POST':
+        print request.POST
+        carr = carrito.objects.filter(usuario = request.user.id)
+        if 'actualizar' in request.POST:
+            for i in range(len(carr)):
+                if carr[i].producto:
+                    carr[i].total = float(carr[i].producto.costo) * float(request.POST['codigo'+str(carr[i].id)])
+                    carr[i].cantidad = request.POST['codigo'+str(carr[i].id)]
+                else:
+                    carr[i].total = float(carr[i].servicio.costo) * float(request.POST['codigo'+str(carr[i].id)])
+                    carr[i].cantidad = request.POST['codigo'+str(carr[i].id)]
+                carr[i].save()
+        if 'eliminar' in request.POST:
+            carr.delete()
+        if 'cotizar' in request.POST:
+            total = 0
+            cli = cliente.objects.filter(usuario = request.user.id)[0]
+            if carr:
+                for i in carr:
+                    total = total + i.total
+                cotiza = cotizacion()
+                cotiza.costo_total = total
+                cotiza.cliente = cli
+                cotiza.save()
+                for j in carr:
+                    cotiza_det = cotizacion_detalle()
+                    #pdb.set_trace()
+                    cotiza_det.cantidad = j.cantidad
+                    if j.producto:
+                        cotiza_det.valor_unitario = j.producto.costo
+                        cotiza_det.producto = j.producto
+                        cotiza_det.total = float(j.producto.costo) * float(j.cantidad)
+                    else:
+                        cotiza_det.valor_unitario = j.servicio.costo
+                        cotiza_det.servicio = j.servicio
+                        cotiza_det.total = float(j.servicio.costo) * float(j.cantidad)
+                    cotiza_det.cotizacion = cotiza
+                    cotiza_det.save()
+                sendmail()
+            carr.delete()
+    return HttpResponseRedirect('/compras')
+
+
+def sendmail():
+    from django.core.mail import send_mail
+    
+    send_mail('Nueva Cotizacion', 'Ud tiene una nueva cotizacion de palichis :P ', 'palichis@solid-ec.org',
+              ['mvargas@totaltek.com.ec','palichis@katarisoft.com'], fail_silently=False)
