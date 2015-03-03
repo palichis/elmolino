@@ -94,7 +94,7 @@ def productos(object):
             else:
                 p_producto = prod[0]
             if request.user.is_authenticated():
-                agregar = "<a href=%s?cat=%s&id=%s&agregar=true>agregar carrito</a>"%(request.path,request.GET['cat'],p_producto.id)
+                agregar = "<a href=%s?cat=%s&id=%s&agregar=true><img src='/static/img/mascarrito.png'></a>"%(request.path,request.GET['cat'],p_producto.id)
             coment = comentario.objects.filter(cproducto = p_producto.id).order_by("-id")
             if request.method == 'POST':
                 #foro_obj = foro.objects.filter(id = request.GET['id'])[0]
@@ -125,6 +125,7 @@ def cservicios(object):
     request = object
     hist,redes,men = general(request)
     coment = ''
+    agregar = ""
     if request.user.is_authenticated():
         mensaj = fcomentario()
     else:
@@ -148,7 +149,7 @@ def cservicios(object):
                 mensaje.cusuario = request.user
                 mensaje.save()
             if request.user.is_authenticated():
-                agregar = "<a href=%s?cat=%s&id=%s&agregar=true>agregar carrito</a>"%(request.path,request.GET['cat'],p_servicio.id)
+                agregar = "<a href=%s?cat=%s&id=%s&agregar=true><img src='/static/img/mascarrito.png'></a>"%(request.path,request.GET['cat'],p_servicio.id)
             coment = comentario.objects.filter(cservicio = p_servicio.id).order_by("-id")
             if 'agregar' in request.GET:
                 carto = carrito.objects.filter(servicio = p_servicio.id, usuario = request.user)

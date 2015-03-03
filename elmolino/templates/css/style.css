@@ -22,7 +22,8 @@ ul{
     margin: 0;
     padding: 0;
     width: 20%;
-    margin: 0 0 0 20px;
+    margin: 0 20px;
+    background: url("/static/img/fondo.png");
 }
 
 #derecha{
