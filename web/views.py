@@ -44,9 +44,9 @@ def menus(objeto,request):
 def fcomentario():
     html = '''
     <form id="formulario" action='' method='post'>
-    <input id="tema"  type="text" value="" name="tema"><br>
-    <textarea id="edit-comment" class="form-textarea resizable required textarea-processed" name="comment" rows="15" cols="60"></textarea><br>
-    <input type='submit' id="submit" value='Actualizar' name="actualizar"/>
+    <input id="tema"  type="text" value="" name="tema" maxlength="20"><br>
+    <textarea id="edit-comment" name="comment" rows="15" cols="60"></textarea><br>
+    <input type='submit' id="submit" value='Agregar' name="actualizar"/>
     </form>
     '''
     return html
@@ -80,6 +80,11 @@ def productos(object):
     hist,redes,men = general(request)
     coment = ''
     agregar = ''
+    if request.user.is_authenticated():
+        mensaj = fcomentario()
+    else:
+        mensaj = ""
+
     if 'cat' in request.GET:
         cprod = cat_producto.objects.filter(nombre = request.GET['cat'])
         prod = producto.objects.filter(cat_producto = cprod[0].id).order_by('nombre')
@@ -90,7 +95,15 @@ def productos(object):
                 p_producto = prod[0]
             if request.user.is_authenticated():
                 agregar = "<a href=%s?cat=%s&id=%s&agregar=true>agregar carrito</a>"%(request.path,request.GET['cat'],p_producto.id)
-            coment = comentario.objects.filter(cproducto = p_producto.id)
+            coment = comentario.objects.filter(cproducto = p_producto.id).order_by("-id")
+            if request.method == 'POST':
+                #foro_obj = foro.objects.filter(id = request.GET['id'])[0]
+                mensaje = comentario()
+                mensaje.tema = request.POST['tema']
+                mensaje.descripcion = request.POST['comment']
+                mensaje.cproducto = p_producto
+                mensaje.cusuario = request.user
+                mensaje.save()
             if 'agregar' in request.GET:
                 carto = carrito.objects.filter(producto = p_producto.id, usuario = request.user)
                 if carto:
@@ -105,13 +118,18 @@ def productos(object):
                     mascar.producto = p_producto
                     mascar.total = 1 * p_producto.costo
                     mascar.save()
-            return render_to_response('producto.html',{'menu':men, 'lista':prod, 'producto': p_producto, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar' : agregar})
+            return render_to_response('producto.html',{'menu':men, 'lista':prod, 'producto': p_producto, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar' : agregar, 'mensaje':mensaj})
 
 
 def cservicios(object):
     request = object
     hist,redes,men = general(request)
     coment = ''
+    if request.user.is_authenticated():
+        mensaj = fcomentario()
+    else:
+        mensaj = ""
+
     if 'cat' in request.GET:
         
         cserv = cat_servicio.objects.filter(nombre = request.GET['cat'])
@@ -121,9 +139,17 @@ def cservicios(object):
                 p_servicio = servicio.objects.filter(id = request.GET['id'])[0]
             else:
                 p_servicio = serv[0]
+            if request.method == 'POST':
+                #foro_obj = foro.objects.filter(id = request.GET['id'])[0]
+                mensaje = comentario()
+                mensaje.tema = request.POST['tema']
+                mensaje.descripcion = request.POST['comment']
+                mensaje.cservicio = p_servicio
+                mensaje.cusuario = request.user
+                mensaje.save()
             if request.user.is_authenticated():
                 agregar = "<a href=%s?cat=%s&id=%s&agregar=true>agregar carrito</a>"%(request.path,request.GET['cat'],p_servicio.id)
-            coment = comentario.objects.filter(cservicio = p_servicio.id)
+            coment = comentario.objects.filter(cservicio = p_servicio.id).order_by("-id")
             if 'agregar' in request.GET:
                 carto = carrito.objects.filter(servicio = p_servicio.id, usuario = request.user)
                 if carto:
@@ -138,7 +164,7 @@ def cservicios(object):
                     mascar.servicio = p_servicio
                     mascar.total = 1 * p_servicio.costo
                     mascar.save()
-            return render_to_response('servicio.html',{'menu':men, 'lista':serv, 'producto': p_servicio, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar':agregar})
+            return render_to_response('servicio.html',{'menu':men, 'lista':serv, 'producto': p_servicio, 'categoria': request.GET['cat'],'foother': hist, 'red':redes, 'comentario':coment, 'agregar':agregar, 'mensaje' : mensaj})
 
 
 def huerto(request):
@@ -285,6 +311,7 @@ def sendmail():
 def foros(request):
     hist,redes,men = general(request)
     coment = ''
+    
     if request.user.is_authenticated():
         mensaj = fcomentario()
     else:
@@ -299,7 +326,8 @@ def foros(request):
         mensaje.save()
     if 'id' in request.GET:
         cforo = foro.objects.filter(id = request.GET['id'])
-        coment = comentario.objects.filter(cforo = request.GET['id'])
+        coment = comentario.objects.filter(cforo = request.GET['id']).order_by("-id")
         if cforo:
             return render_to_response('foro.html',{'menu':men, 'content': cforo[0], 'foother': hist, 'red':redes, 'comentario' : coment, 'mensaje' : mensaj})
+    cforo = ''
     return render_to_response('foro.html',{'menu':men, 'content': cforo, 'foother': hist, 'red':redes, 'mensaje' : mensaj})

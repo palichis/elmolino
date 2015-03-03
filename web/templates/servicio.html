@@ -36,9 +36,18 @@
       <strong>Detalle</strong>: <p style="text-align:justify">{{producto.descripcion|safe}}</p><br>
     </p>
   </div>
+  
+  <p>
+    <h3>Deja tu comentario</h3>
+  </p>
+  <p>
+    {{mensaje|safe}}
+  </p>
+
+
   <strong>Comentarios</strong>
   {% for c in comentario%}
-  <table style="width:75%; border: 1px solid #ccc;">
+  <table style="width:75%; border: 1px solid #ccc; background: url('/static/img/fondo.png');">
     <tr><td >
   {{c.tema}}
   </td></tr>

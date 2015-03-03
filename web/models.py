@@ -126,7 +126,7 @@ class foro(models.Model):
 
 	
 class comentario(models.Model):
-	tema = models.CharField(max_length=10)
+	tema = models.CharField(max_length=20)
 	fecha = models.DateTimeField(auto_now=False, auto_now_add=True)
 	descripcion = models.CharField(max_length=1000)
 	cproducto = models.ForeignKey(producto, null=True, blank=True)
