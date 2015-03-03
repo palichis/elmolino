@@ -50,8 +50,6 @@ class producto(models.Model):
 	costo = models.FloatField()
 	cantidad = models.FloatField()
 	imagen = models.ImageField(upload_to='productos')
-	imagen1 = models.ImageField(upload_to='productos', default="")
-	imagen2 = models.ImageField(upload_to='productos', default="")
 	variedad = models.ForeignKey(variedad, db_column='variedad_id')
 	cat_producto = models.ForeignKey(cat_producto)
 	def __unicode__(self):
