@@ -40,6 +40,17 @@ def menus(objeto,request):
             barra = barra + '</li>'
     return barra
 
+
+def fcomentario():
+    html = '''
+    <form id="formulario" action='' method='post'>
+    <input id="tema"  type="text" value="" name="tema"><br>
+    <textarea id="edit-comment" class="form-textarea resizable required textarea-processed" name="comment" rows="15" cols="60"></textarea><br>
+    <input type='submit' id="submit" value='Actualizar' name="actualizar"/>
+    </form>
+    '''
+    return html
+
 def general(request):
     hist = elmolino.objects.all()[0]
     redes = siguenos.objects.all()
@@ -269,3 +280,26 @@ def sendmail():
     
     send_mail('Nueva Cotizacion', 'Ud tiene una nueva cotizacion de palichis :P ', 'palichis@solid-ec.org',
               ['mvargas@totaltek.com.ec','palichis@katarisoft.com'], fail_silently=False)
+
+
+def foros(request):
+    hist,redes,men = general(request)
+    coment = ''
+    if request.user.is_authenticated():
+        mensaj = fcomentario()
+    else:
+        mensaj = ""
+    if request.method == 'POST':
+        foro_obj = foro.objects.filter(id = request.GET['id'])[0]
+        mensaje = comentario()
+        mensaje.tema = request.POST['tema']
+        mensaje.descripcion = request.POST['comment']
+        mensaje.cforo = foro_obj
+        mensaje.cusuario = request.user
+        mensaje.save()
+    if 'id' in request.GET:
+        cforo = foro.objects.filter(id = request.GET['id'])
+        coment = comentario.objects.filter(cforo = request.GET['id'])
+        if cforo:
+            return render_to_response('foro.html',{'menu':men, 'content': cforo[0], 'foother': hist, 'red':redes, 'comentario' : coment, 'mensaje' : mensaj})
+    return render_to_response('foro.html',{'menu':men, 'content': cforo, 'foother': hist, 'red':redes, 'mensaje' : mensaj})

@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('web', '0004_auto_20150205_1932'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='carrito',
+            name='total',
+            field=models.FloatField(default=0),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='carrito',
+            name='cantidad',
+            field=models.IntegerField(),
+            preserve_default=True,
+        ),
+    ]

@@ -116,8 +116,9 @@ class cat_foro(models.Model):
 	
 class foro(models.Model): 
 	fecha = models.DateField(auto_now=False, auto_now_add=True)
-	tema = models.CharField(max_length=20)
-	comentario = models.CharField(max_length=200)
+	tema = models.CharField(max_length=30)
+        coment_small = models.CharField(max_length=250, null=True, blank=True)
+	ccomentario = models.CharField(max_length=5000)
 	usuario = models.ForeignKey(User)
 	cat_foro = models.ForeignKey(cat_foro, db_column='cat_foro_id')
 	def __unicode__(self):
@@ -130,6 +131,7 @@ class comentario(models.Model):
 	descripcion = models.CharField(max_length=1000)
 	cproducto = models.ForeignKey(producto, null=True, blank=True)
         cservicio = models.ForeignKey(servicio, null=True,blank=True)
+        cforo = models.ForeignKey(foro, null=True,blank=True)
 	cusuario = models.ForeignKey(User)
 	def __unicode__(self):
 		return "%s"%(self.tema)	
