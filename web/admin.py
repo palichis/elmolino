@@ -1,11 +1,13 @@
 from django import forms
 from django.contrib import admin
 from web.models import *
+from django.contrib.auth.models import User
 # Register your models here.
 
 admin.site.register(galeria)
 admin.site.register(carrito)
 admin.site.register(cliente)
+
 admin.site.register(variedad)
 admin.site.register(cat_producto)
 
@@ -56,7 +58,7 @@ admin.site.register(foro, foroadmin)
 class comentarioform(forms.ModelForm):
     descripcion = forms.CharField( widget=forms.Textarea(attrs={'rows': 5, 'cols': 150}) )
     class Meta:
-        fields = ['tema','descripcion']
+        fields = ['tema','descripcion','responder']
         model = comentario
 class comentarioadmin(admin.ModelAdmin):
     form = comentarioform

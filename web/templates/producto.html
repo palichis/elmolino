@@ -25,7 +25,7 @@
     <h3>{{producto.nombre}}</h3>
     <p>
       <div>
-	<img style="float:left; margin-right:30px;margin-left:30px" src=/static/{{producto.imagen2}}  height="220" width="220">
+	<img style="float:left; margin-right:30px;margin-left:30px" src=/static/{{producto.imagen}}  height="220" width="220">
       </div>
       <strong>C&oacute;digo:</strong> {{producto.codigo|safe}}<br>
       <strong>Nombre</strong>: {{producto.nombre|safe}}<br>
@@ -45,13 +45,9 @@
   </div>
 
   <p>
-    <h3>Deja tu comentario</h3>
-  </p>
-  <p>
     {{mensaje|safe}}
   </p>
   
-  <strong>Comentarios</strong>
   {% for c in comentario%}
   <table style="width:75%; border: 1px solid #ccc; background: url('/static/img/fondo.png');">
     <tr><td >

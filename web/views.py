@@ -21,6 +21,7 @@ def slide():
     return sl
 
 def menus(objeto,request):
+    #pdb.set_trace()
     barra = ''
     menu_db = objeto
     #if request.user.is_authenticated():
@@ -32,7 +33,7 @@ def menus(objeto,request):
             barra = barra + "<li class='has-sub'><a href='%s'><span>%s</span></a>"%(padre.url,padre.nombre)
             if request.user.is_authenticated():
                 grupo = Group.objects.all()
-            sub_menu = menu.objects.filter(padre=padre.id)
+            sub_menu = menu.objects.filter(padre=padre.id).order_by('orden')
             if sub_menu:
                 barra = barra + '<ul>'
                 barra1 = barra + menus(sub_menu,request)
@@ -43,11 +44,13 @@ def menus(objeto,request):
 
 def fcomentario():
     html = '''
+    <h3>Deja tu comentario</h3>
     <form id="formulario" action='' method='post'>
     <input id="tema"  type="text" value="" name="tema" maxlength="20"><br>
     <textarea id="edit-comment" name="comment" rows="15" cols="60"></textarea><br>
     <input type='submit' id="submit" value='Agregar' name="actualizar"/>
-    </form>
+    </form><p>
+    <strong>Comentarios</strong></p>
     '''
     return html
 
@@ -55,10 +58,10 @@ def general(request):
     hist = elmolino.objects.all()[0]
     redes = siguenos.objects.all()
     grupo = Group.objects.filter(name="all")
-    men = menus(menu.objects.filter(nivel = 1,acceso=grupo),request)
+    men = menus(menu.objects.filter(nivel = 1,acceso=grupo).order_by('orden'),request)
     if request.user.is_authenticated():
         gadmin = Group.objects.filter(name="registrado")
-        men = men + menus(menu.objects.filter(nivel = 1,acceso=gadmin),request)
+        men = men + menus(menu.objects.filter(nivel = 1,acceso=gadmin).order_by('orden'),request)
     return hist,redes,men
 
 def categorias(objeto):
@@ -309,10 +312,11 @@ def sendmail():
               ['mvargas@totaltek.com.ec','palichis@katarisoft.com'], fail_silently=False)
 
 
-def foros(request):
+def noticias(request):
     hist,redes,men = general(request)
     coment = ''
-    
+    cat_foro_obj = cat_foro.objects.filter(nombre = "noticias")
+    menu_foro = foro.objects.filter(cat_foro = cat_foro_obj).order_by('-id')[0:10]
     if request.user.is_authenticated():
         mensaj = fcomentario()
     else:
@@ -329,6 +333,10 @@ def foros(request):
         cforo = foro.objects.filter(id = request.GET['id'])
         coment = comentario.objects.filter(cforo = request.GET['id']).order_by("-id")
         if cforo:
-            return render_to_response('foro.html',{'menu':men, 'content': cforo[0], 'foother': hist, 'red':redes, 'comentario' : coment, 'mensaje' : mensaj})
-    cforo = ''
-    return render_to_response('foro.html',{'menu':men, 'content': cforo, 'foother': hist, 'red':redes, 'mensaje' : mensaj})
+            return render_to_response('foro.html',{'menu':men, 'content': cforo[0], 'foother': hist, 'red':redes, 'comentario' : coment, 'mensaje' : mensaj, 'izquierda' : menu_foro})
+    cforo = foro.objects.filter(cat_foro = cat_foro_obj).order_by('-id')[0:10]
+    return render_to_response('foro.html',{'menu':men, 'contents': cforo, 'foother': hist, 'red':redes, 'izquierda' : menu_foro})
+
+
+def foros(request):
+    return True

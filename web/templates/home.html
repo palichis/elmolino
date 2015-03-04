@@ -15,7 +15,7 @@
 <table style="width:100%; margin: -5px">
   <tr>
     {% for i in content%}
-    <td valign="top" style="width:33%; text-align:left; background:url(/static/img/fondo.png) repeat scroll 0 0 rgba(0, 0, 0, 0)"><p style="margin:3px; font-size-adjust: 0.8;"><a href=/foro?id={{i.id}}>{{i.tema}}</a></p>
+    <td valign="top" style="width:33%; text-align:left; background:url(/static/img/fondo.png) repeat scroll 0 0 rgba(0, 0, 0, 0)"><p style="margin:3px; font-size-adjust: 0.8;"><a href=/noticias?id={{i.id}}>{{i.tema}}</a></p>
       <p style="text-align: justify; margin:10px">{{i.coment_small}}</p>
     </td>
     {% endfor %}
@@ -30,14 +30,16 @@
 
 {% block imgmenu%}
 <h3>PRODUCTOS Y SERVICIOS</3>
-<table style="width:100%">
+<p><table style="width:100%">
   <tr>
     {% for i in img%}
-    <td style="width:33%; text-align:center"><a href=/{{i.nombre}}><img src=/static/{{i.imagen}}  height="300" width="300"></a>
+    <td style="width:33%; text-align:center; text-transform: uppercase;">
+      {{i.nombre}}
+    <a href=/{{i.nombre}}><img src=/static/{{i.imagen}}  height="300" width="300"></a>
     </td>
     {% endfor %}
   </tr>
-</table>
+</table></p>
 {% endblock%}
 {% block foother%}
 <table style="width:100%; background:#204609">

@@ -131,6 +131,7 @@ class comentario(models.Model):
         cservicio = models.ForeignKey(servicio, null=True,blank=True)
         cforo = models.ForeignKey(foro, null=True,blank=True)
 	cusuario = models.ForeignKey(User)
+        responder = models.ForeignKey('self', null=True, blank=True)
 	def __unicode__(self):
 		return "%s"%(self.tema)	
 
@@ -143,12 +144,13 @@ class galeria(models.Model):
 class menu(models.Model):
 	nombre = models.CharField(max_length=10)
 	url = models.CharField(max_length=30)
-	padre = models.ForeignKey('self', null=True, blank=True)
+	padre = models.ForeignKey('self', null=True, blank=True, related_name='children')
         acceso = models.ForeignKey(Group, null=True, blank=True, default="")
 	nivel = models.SmallIntegerField(default=1)
+        orden = models.SmallIntegerField(default=1)
         
 	def __unicode__(self):
-		return str(self.nombre)
+		return "%s orden x%s"%(str(self.nombre),str(self.orden))
 
 class elmolino(models.Model):
 	historia= models.CharField(max_length=5000)
