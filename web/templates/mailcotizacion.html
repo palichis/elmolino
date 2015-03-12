@@ -1,0 +1,60 @@
+<div> 
+<p>
+Estimad@ <strong> Maribel Vargas </strong>
+</p>        
+<p>
+Se ha realizado las iguente solicitud de cotizacion en Vivero y Huerto "El Molino"
+</p>       <p>                                                                                                                                                                                           
+Detalle
+</p>
+<p>
+<strong>Cliente </strong>{{cliente.nombre}} {{cliente.apellido}} <br>
+<strong>Total </strong>{{total}}
+</p>
+<p>
+  <table style="width: 100%">
+      <tr style="background:#ccf">
+	<td>
+	  Producto / servicio
+	</td>
+	<td>
+	  Cantidad
+	</td>
+	<td>
+	  Costo unitario
+	</td>
+	<td>
+	  Costo Total
+	</td>
+      </tr>
+      {% for r in detalle%}
+      <tr style="background:#fff">
+	<td>
+	  {% if r.producto%}
+	  {{r.producto|safe}}
+	  {% endif%}
+	  {% if r.servicio %}
+	  {{r.servicio|safe}}
+	  {% endif%}
+	</td>
+	<td>
+	  {{r.cantidad}}
+	</td>
+	<td>
+	  {% if r.producto%}
+	  {{r.producto.costo|safe}}
+	  {% endif%}
+	  {% if r.servicio%}
+	  {{r.servicio.costo|safe}}
+	  {% endif%}
+	</td>
+	<td>
+	  {{r.total}}
+	</td>
+      </tr>
+      {% endfor%}
+
+      </form>
+    </table>
+</p>
+</div>

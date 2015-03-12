@@ -1,0 +1,2 @@
+from web.forms import *
+from django.contrib.auth.forms import *
