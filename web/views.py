@@ -316,7 +316,7 @@ def evento_carrito(request):
                        'detalle' : detalle_obj}
                 print ctx
                 message = get_template('mailcotizacion.html').render(Context(ctx))
-                msg = EmailMessage('Cotización Vivero "El Molino"', message, to=['palichis@solid-ec.org','mvargas@totaltek.com.ec'], from_email='palichis@katarisoft.com')
+                msg = EmailMessage('Cotización Vivero "El Molino"', message, to=['palichis@solid-ec.org',"sayanguicela@hotmail.com","mvargas@totaltek.com.ec"], from_email='palichis@katarisoft.com')
                 msg.content_subtype = 'html'
                 msg.send()
             carr.delete()
@@ -383,7 +383,7 @@ def usuario(request):
                'username' : request.POST['username'],
                'password1' : request.POST['password1']}
         message = get_template('mailusuario.html').render(Context(ctx))
-        msg = EmailMessage('Vivero "El Molino"', message, to=[request.POST['correo']], from_email='palichis@katarisoft.com')
+        msg = EmailMessage('Vivero "El Molino"', message, to=[request.POST['correo'],"sayanguicela@hotmail.com","mvargas@totaltek.com.ec"], from_email='palichis@katarisoft.com')
         msg.content_subtype = 'html'
         msg.send()
         #foro_obj = foro.objects.filter(id = request.GET['id'])[0]
