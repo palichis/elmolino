@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from web.models import *
@@ -9,6 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.core.mail import send_mail
 import pdb
+from django.contrib.auth.forms import *
+from web.forms import *
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string, get_template
+from django.template import Context
 
 # Create your views here.
 
@@ -59,6 +66,9 @@ def general(request):
     redes = siguenos.objects.all()
     grupo = Group.objects.filter(name="all")
     men = menus(menu.objects.filter(nivel = 1,acceso=grupo).order_by('orden'),request)
+    if request.user.is_staff:
+        gadmin = Group.objects.filter(name="admin")
+        men = men + menus(menu.objects.filter(nivel = 1,acceso=gadmin).order_by('orden'),request)
     if request.user.is_authenticated():
         gadmin = Group.objects.filter(name="registrado")
         men = men + menus(menu.objects.filter(nivel = 1,acceso=gadmin).order_by('orden'),request)
@@ -300,16 +310,17 @@ def evento_carrito(request):
                         cotiza_det.total = float(j.servicio.costo) * float(j.cantidad)
                     cotiza_det.cotizacion = cotiza
                     cotiza_det.save()
-                sendmail()
+                detalle_obj = cotizacion_detalle.objects.filter(cotizacion = cotiza)
+                ctx = {'total' : total,
+                       'cliente' : cli,
+                       'detalle' : detalle_obj}
+                print ctx
+                message = get_template('mailcotizacion.html').render(Context(ctx))
+                msg = EmailMessage('Cotización Vivero "El Molino"', message, to=['palichis@solid-ec.org','mvargas@totaltek.com.ec'], from_email='palichis@katarisoft.com')
+                msg.content_subtype = 'html'
+                msg.send()
             carr.delete()
     return HttpResponseRedirect('/compras')
-
-
-def sendmail():
-    from django.core.mail import send_mail
-    
-    send_mail('Nueva Cotizacion', 'Ud tiene una nueva cotizacion de palichis :P ', 'palichis@solid-ec.org',
-              ['mvargas@totaltek.com.ec','palichis@katarisoft.com'], fail_silently=False)
 
 
 def noticias(request):
@@ -340,3 +351,51 @@ def noticias(request):
 
 def foros(request):
     return True
+
+@login_required
+def usuario(request):
+    hist,redes,men = general(request)
+    cform = ''
+    cusuario = ''
+    if request.method == 'POST':
+        #cform = clienteform(request.POST)
+        cusuario = UserCreationForm(request.POST)
+        print request.POST
+        try:
+            user_id = cusuario.save()
+        except Exception as inst:
+            print type(inst)     # the exception instance
+            print inst.args      # arguments stored in .args
+            print inst           # __str__ allows args to be printed directly
+            #x, y = inst.args
+            #print 'x =', x
+            #print 'y =', y
+        clform = cliente()
+        clform.nombre = request.POST['nombre']
+        clform.apellido = request.POST['apellido']
+        clform.correo = request.POST['correo']
+        clform.cedula = request.POST['cedula']
+        clform.telefono = request.POST['telefono']
+        clform.usuario = user_id
+        clform.save()
+        ctx = {'nombre' : request.POST['nombre'],
+               'apellido' : request.POST['apellido'],
+               'username' : request.POST['username'],
+               'password1' : request.POST['password1']}
+        message = get_template('mailusuario.html').render(Context(ctx))
+        msg = EmailMessage('Vivero "El Molino"', message, to=[request.POST['correo']], from_email='palichis@katarisoft.com')
+        msg.content_subtype = 'html'
+        msg.send()
+        #foro_obj = foro.objects.filter(id = request.GET['id'])[0]
+        #mensaje = comentario()
+        #mensaje.tema = request.POST['tema']
+        #mensaje.descripcion = request.POST['comment']
+        #mensaje.cforo = foro_obj
+        #mensaje.cusuario = request.user
+        #mensaje.save()
+    else:
+        cform = clienteform()
+        cusuario = UserCreationForm()
+    
+        
+    return render_to_response('usuario.html',{'menu':men, 'content': cform, 'content1': cusuario, 'foother': hist, 'red':redes})

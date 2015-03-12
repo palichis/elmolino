@@ -21,4 +21,5 @@ urlpatterns = patterns('',
                        url(r'^noticias/$', noticias),
                        url(r'^compras/evento/$', evento_carrito),
                        (r'^accounts/login/$', 'django.contrib.auth.views.login'),
+                       url(r'^usuario/$', usuario),
 )
